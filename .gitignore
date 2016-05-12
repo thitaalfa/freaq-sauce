@@ -1,28 +1,75 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+#include<iostream>
+#include<fstream>
 
-# Precompiled Headers
-*.gch
-*.pch
+using namespace std;
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
 
-# Fortran module files
-*.mod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+int main() {
+    
+    string names[3][5];
+    float tab [7][30];
+    ifstream in;
+    in.open ("studentsD.txt");
+    for (int j=0; j<30; j++){
+        for (int i=0; i<7; i++){
+            in >> tab[i][j];
+        }
+    }
+    in.close();
+    in.open("studentsH.txt");
+    for (int j=0; j<5; j++){
+        for(int i=0; i<3; i++){
+            in >> names[i][j];
+        }
+    }
+    in.close();
+    double mo[6][5];
+    for (int i=0; i<6; i++){
+        for (int j=0; j<5; j++){
+            mo[i][j] = 0;
+        }
+    }
+        for (int j=0; j<5; j++){
+            int tmp = j;
+            for (int k=0; k<6; k++){
+                for (int i=2; i<7; i++){
+                    mo[i-2][j] = mo[i-2][j] + tab[i][tmp];
+                }
+                tmp = tmp + 5;
+            }
+        }
+    double tmp=0;
+    for (int j=0; j<5; j++){
+        tmp=0;
+        for (int i=0; i<5; i++){
+            mo[i][j] = mo[i][j] / 6 ;
+            tmp = mo[i][j] + tmp;
+        }
+        mo[5][j] = tmp/5;
+    }
+    int imin;
+    for (int j=0; j<4; j++){
+        imin = j;
+        for (int i=j+1; i<5; i++){
+            if (mo[5][i] < mo[5][imin]) {
+                imin = i;
+            }
+        }
+        if (imin !=j){
+            for (int i=0; i<6; i++){
+                swap(mo[i][j], mo[i][imin]);
+            }
+            swap (names[1][j], names[1][imin]);
+            swap (names[2][j], names[2][imin]);
+        }
+    }
+    cout.precision(3);
+    for (int j=0; j<5; j++){
+        cout << names[1][j] << " " << names[2][j] << " ";
+        for (int i=0; i<6; i++){
+            cout << mo[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}
